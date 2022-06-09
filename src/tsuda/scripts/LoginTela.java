@@ -63,6 +63,7 @@ public class LoginTela extends JFrame
             public void actionPerformed(ActionEvent e) {
                 Notepad notepad = new Notepad();
                 notepad.criarPasta();
+                notepad.lerArquivo();
             }
         });
 
