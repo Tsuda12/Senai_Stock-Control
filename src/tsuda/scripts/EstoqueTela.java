@@ -62,7 +62,7 @@ public class EstoqueTela extends JFrame
             public void actionPerformed(ActionEvent e) {
                 //--Checa se a lista está vazia para ler
                 if(produtos_lista.isEmpty()==true){
-                    JOptionPane.showMessageDialog(null, "Sem itens cadastrados!", "Erro", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, Avisos.SemProdutos.getValue(), "Erro", JOptionPane.ERROR_MESSAGE);
                 }
                 else{
                     //--Chama a janela ler
@@ -84,7 +84,7 @@ public class EstoqueTela extends JFrame
             public void actionPerformed(ActionEvent e) {
                 //--Checa se a lista está vazia
                 if (produtos_lista.isEmpty()==true){
-                    JOptionPane.showMessageDialog(null, "Sem itens cadastrados!", "Erro", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, Avisos.SemProdutos.getValue(), "Erro", JOptionPane.ERROR_MESSAGE);
                 }
                 else{
                     //--Chamar a janela atualuzar
@@ -107,7 +107,7 @@ public class EstoqueTela extends JFrame
                 //--Checa se a lista está vazia
                 if(produtos_lista.isEmpty()==true)
                 {
-                    JOptionPane.showMessageDialog(null, "Sem itens cadastrados!", "Erro", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, Avisos.SemProdutos.getValue(), "Erro", JOptionPane.ERROR_MESSAGE);
                 }
                 else {
                     //--Chama a janela deletar

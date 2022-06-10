@@ -4,9 +4,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 
-public class AdicionarTela extends JFrame implements ActionListener {
+public class AdicionarTela extends JFrame implements ActionListener, Log {
     //VARIÁVEIS
     public ArrayList<Produto> produto_lista = new ArrayList<Produto>();
 
@@ -64,16 +73,19 @@ public class AdicionarTela extends JFrame implements ActionListener {
 
                 try{
                     Double num = Double.parseDouble(quantidadeP);
-                    JOptionPane.showMessageDialog(null, "Produto cadastrado!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, Avisos.ProdutoCadastrado.getValue(), "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                    log();
                     dispose();
                 }
                 catch(NumberFormatException et){
                     quantidadeTrue = false;
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
 
                 if(quantidadeTrue == false)
                 {
-                    JOptionPane.showMessageDialog(null, "Digite apenas números!", "Erro", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, Avisos.ErroNumero.getValue(), "Erro", JOptionPane.ERROR_MESSAGE);
                     ok=0;
                 }
 
@@ -81,7 +93,7 @@ public class AdicionarTela extends JFrame implements ActionListener {
                     for (int i = 0; i < produto_lista.size(); i++) {
                         if(produto_lista.get(i).getNome().equals(nomeP))
                         {
-                            JOptionPane.showMessageDialog(null, "Este produto já existe!", "Erro", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(null, Avisos.ProdutoExistente.getValue(), "Erro", JOptionPane.ERROR_MESSAGE);
                             ok=0;
                         }
                     }
@@ -98,6 +110,31 @@ public class AdicionarTela extends JFrame implements ActionListener {
         setResizable(false);
         getContentPane().setBackground(Color.BLACK);
         setVisible(true);
+    }
+
+    //INTERFACE
+    @Override
+    public void log() throws IOException {
+        //--Formata data
+        Date data = new Date();
+        SimpleDateFormat formatar = new SimpleDateFormat("dd/MM/yyyy -- hh:mm");
+        String dataFormatada = formatar.format(data);
+
+        //--Criar txt
+        String conteudo = "Item adicionado -- " + dataFormatada;
+
+        Path caminho = Paths.get("txt/Log");
+        if(Files.exists(caminho)){
+            Files.write(caminho, Collections.singleton(conteudo), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+        }
+        else{
+            Files.write(caminho, Collections.singleton(conteudo), StandardCharsets.UTF_8);
+        }
+    }
+
+    @Override
+    public void logC() throws IOException {
+
     }
 
     @Override

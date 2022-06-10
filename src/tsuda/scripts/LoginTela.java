@@ -4,15 +4,24 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Date;
 
 public class LoginTela extends JFrame
 {
     //VARIÁVEIS
     private JLabel titulo = new JLabel("LOGIN | CADASTRO");
     private JLabel usuario = new JLabel("Usuário");
-    private JTextField nomeUsuario = new JTextField(100);
+    JTextField nomeUsuario = new JTextField(100);
     private JLabel senha = new JLabel("Senha");
-    private JTextField senhaUsuaro = new JTextField(100);
+    private JTextField senhaUsuario = new JTextField(100);
     private JButton botaoLogar = new JButton("ENTRAR");
     private JButton botaoCadastrar = new JButton("CADASTRAR");
 
@@ -42,8 +51,8 @@ public class LoginTela extends JFrame
         senha.setForeground(Color.WHITE);
         add(senha);
 
-        senhaUsuaro.setBounds(160, 160, 240, 30);
-        add(senhaUsuaro);
+        senhaUsuario.setBounds(160, 160, 240, 30);
+        add(senhaUsuario);
 
         botaoLogar.setBounds(40, 230, 150, 40);
         botaoLogar.setFont(new Font("Montserrat Bold", Font.PLAIN, 15));
@@ -51,6 +60,17 @@ public class LoginTela extends JFrame
         botaoLogar.setForeground(Color.WHITE);
         botaoLogar.setFocusPainted(false);
         add(botaoLogar);
+        botaoLogar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Notepad notepad = new Notepad();
+
+                notepad.criarPasta();
+                notepad.lerArquivo();
+                notepad.contarLinhas();
+                notepad.logica(nomeUsuario.getText(), senhaUsuario.getText());
+            }
+        });
 
         botaoCadastrar.setBounds(250, 230, 150, 40);
         botaoCadastrar.setFont(new Font("Montserrat Bold", Font.PLAIN, 15));
@@ -62,12 +82,18 @@ public class LoginTela extends JFrame
             @Override
             public void actionPerformed(ActionEvent e) {
                 Notepad notepad = new Notepad();
+
                 notepad.criarPasta();
                 notepad.lerArquivo();
+                notepad.contarLinhas();
+                notepad.addRegistro(nomeUsuario.getText(), senhaUsuario.getText());
+
+                nomeUsuario.setText("");
+                senhaUsuario.setText("");
             }
         });
 
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(450, 350);
         setResizable(false);
         setLocationRelativeTo(null);

@@ -4,9 +4,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 
-public class DeletarTela extends JFrame {
+public class DeletarTela extends JFrame implements Log{
     //VARIÁVEIS
     public ArrayList<Produto> produto_lista = new ArrayList<Produto>();
 
@@ -52,14 +61,19 @@ public class DeletarTela extends JFrame {
                     if (produto_lista.get(i).getNome().equals(nomeP)){
                         produto_lista.remove(i);
                         controle = 1;
-                        JOptionPane.showMessageDialog(null, "Produto deletado!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, Avisos.ProdutoDeletado.getValue(), "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                        try {
+                            log();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
                         dispose();
                     }
                 }
 
                 if (controle==-1)
                 {
-                    JOptionPane.showMessageDialog(null, "Produto não encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, Avisos.SemProdutos.getValue(), "Erro", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -69,5 +83,30 @@ public class DeletarTela extends JFrame {
         setResizable(false);
         getContentPane().setBackground(Color.BLACK);
         setVisible(true);
+    }
+
+    //INTERFACE
+    @Override
+    public void log() throws IOException {
+        //--Formata data
+        Date data = new Date();
+        SimpleDateFormat formatar = new SimpleDateFormat("dd/MM/yyyy -- hh:mm");
+        String dataFormatada = formatar.format(data);
+
+        //--Criar txt
+        String conteudo = "Item deletado -- " + dataFormatada;
+
+        Path caminho = Paths.get("txt/Log");
+        if(Files.exists(caminho)){
+            Files.write(caminho, Collections.singleton(conteudo), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+        }
+        else{
+            Files.write(caminho, Collections.singleton(conteudo), StandardCharsets.UTF_8);
+        }
+    }
+
+    @Override
+    public void logC() throws IOException {
+
     }
 }

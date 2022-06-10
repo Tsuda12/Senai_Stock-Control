@@ -2,9 +2,18 @@ package tsuda.scripts;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 
-public class LerTela extends JFrame {
+public class LerTela extends JFrame implements Log {
     //VARIÁVEIS
     public ArrayList<Produto> produto_lista = new ArrayList<Produto>();
     private JTextArea txtArea = new JTextArea();
@@ -43,5 +52,31 @@ public class LerTela extends JFrame {
         setResizable(false);
         getContentPane().setBackground(Color.BLACK);
         setVisible(true);
+    }
+
+
+    //INTERFACE
+    @Override
+    public void log() throws IOException {
+        //--Formata data
+        Date data = new Date();
+        SimpleDateFormat formatar = new SimpleDateFormat("dd/MM/yyyy -- hh:mm");
+        String dataFormatada = formatar.format(data);
+
+        //--Criar txt
+        String conteudo = "Lista exibida -- " + dataFormatada;
+
+        Path caminho = Paths.get("txt/Log");
+        if(Files.exists(caminho)){
+            Files.write(caminho, Collections.singleton(conteudo), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+        }
+        else{
+            Files.write(caminho, Collections.singleton(conteudo), StandardCharsets.UTF_8);
+        }
+    }
+
+    @Override
+    public void logC() throws IOException {
+
     }
 }
